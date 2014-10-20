@@ -57,7 +57,7 @@ public class Brouillon {
 						} else {
 
 							for (i = 0; i < A.length; i++) {
-								for (j = 0; j < A[i].length; j++) {
+								for (j = 0; j < A[i].length;j++) {
 									// System.out.println(A[i][j]);
 									if (A[i][j] == 1) {
 										return false;
