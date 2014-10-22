@@ -18,7 +18,11 @@ public class Brouillon {
 	static Random random = new Random();
 
 	public static void main(String [] args){
-		System.out.println(matrixToString(createMatrix(3,6,8,10)));
+		double[][] A = createMatrix(3,3,1,10);
+		double[][] B = createMatrix(3,3,1,10);
+		double[][] M = createMatrix(3,3,1,10);
+		System.out.print(updateUElem(A,B,M,2,3));
+		
 	}
 
 	public static String matrixToString(double[][] A) {
@@ -121,20 +125,24 @@ public class Brouillon {
 		return Math.sqrt(s/nonNuls);
 	}
 
-/*	public static double updateUElem( double[][] M, double[][] U, double[][] V, int r, int s ) {
+	public static double updateUElem( double[][] M, double[][] U, double[][] V, int r, int s ) {
 		// somme interieur parenthès
-		int somme1=0;
-		for (int j=0; j <M[0].length; j++){
+		double numerator = 0.0;
+		double dentro =0.0;
+		for (int j=0;j<M[0].length;j++){
 			for (int k=0; k<V.length; k++){
-				if (k!=s){
-					somme1+=(V[s][j]*(M[r][j]-U[r][k]*V[k][j]);
-				}
+				if (k!=0){
+					dentro += U[r][k]*V[k][j];
+					numerator += V[s][j]*(M[r][j]-dentro);
 				}
 			}
 		}
-
-		return 0;
-	}*/
+		double denominateur = 0.0;
+		for (int j=0; j<M[0].length; j++){
+			denominateur += (V[s][j])*(V[s][j]);
+		}
+		return numerator/denominateur;
+	}
 
 	public static double updateVElem( double[][] M, double[][] U, double[][] V, int r, int s ) {
 		/* M�thode � coder */
