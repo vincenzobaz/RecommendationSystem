@@ -171,11 +171,23 @@ public class Brouillon {
 	}
 
 	public static double[][] optimizeU(double[][] M, double[][] U, double[][] V) {
-		/* M�thode � coder */
-		
+		// let's first copy our matrix		
 		return null;
 	}
+	
+	public static double[][] copyMatrix(double[][] MAT){
+		int l = MAT.length ;
+		int c = MAT[0].length;
+		double[][] copy = new double[l][c];
+		for (int i=0; i<l; i++){
+			for (int j=0; j<c; j++){
+				copy[i][j]=MAT[i][j];
+			}
+		}
+		return copy;
+	}
 
+	
 	public static double[][] optimizeV(double[][] M, double[][] U, double[][] V) {
 		/* M�thode � coder */
 		return null;
