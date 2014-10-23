@@ -18,10 +18,25 @@ public class Brouillon {
 	static Random random = new Random();
 
 	public static void main(String[] args) {
-		double[][] A = createMatrix(3, 3, 1, 10);
-		double[][] B = createMatrix(3, 3, 1, 10);
-		double[][] M = createMatrix(3, 3, 1, 10);
-		System.out.print(updateUElem(A, B, M, 0, 2));
+		/*
+		 * double[][] A = createMatrix(3, 3, 1, 10); double[][] B =
+		 * createMatrix(3, 3, 1, 10); double[][] M = createMatrix(3, 3, 1, 10);
+		 * // System.out.print(updateUElem(A, B, M, 0, 2));
+		 * System.out.println(matrixToString(A));
+		 */
+		double[][] A = {
+				{ 8.720978934729413, 1.8649975862212114, 6.55828759388579 },
+				{ 3.6864176599267173, 8.293680230517953, 9.871736058704295 },
+				{ 7.649106116789142, 5.225491035924502, 7.064956791715652 }, };
+		double[][] B = {
+				{ 4.023662030359177, 2.020214420640082, 8.181574445864584 },
+				{ 1.2106181813405508, 6.813029962496369, 7.848668872866865 },
+				{ 7.478873480449156, 1.8423891001675936, 5.912889408057335 }, };
+		double[][] C = {
+				{ 7.582872119819165, 8.61618429201534, 9.099990757435942 },
+				{ 5.827687924464552, 8.173808424325024, 9.813510353524222 },
+				{ 5.514119574095468, 4.186987822600329, 2.222548142372542 }, };
+		System.out.println(updateUElem(A, B, C, 0, 2));
 
 	}
 
@@ -130,25 +145,26 @@ public class Brouillon {
 
 	public static double updateUElem(double[][] M, double[][] U, double[][] V,
 			int r, int s) {
-		// somme interieur parenthÃ¨s
+		// somme interieur parenthès
 		int dim = V[0].length;
 		double numerateur = 0.0;
 		double denominateur = 0.0;
 		for (int j = 0; j < dim; j++) {
 			if (M[r][j] != 0) {
-				numerateur += V[s][j]* (M[r][j] - SommeElementsInt(U, V, r, j));
+				numerateur += V[s][j]
+						* (M[r][j] - SommeElementsInt(U, V, r, j, s));
+				denominateur += Math.pow(V[s][j], 2);
 			}
-			denominateur += Math.pow(V[s][j], 2);
 		}
 		return numerateur / denominateur;
 	}
 
 	public static double SommeElementsInt(double[][] U, double[][] V, int r,
-			int j) {
+			int j, int valInterdite) {
 		int dim = V.length;
 		double somme = 0.0;
 		for (int k = 0; k < dim; k++) {
-			if (k != 0) {
+			if (k != valInterdite) {
 				somme += U[r][k] * V[k][j];
 			}
 		}
@@ -163,31 +179,31 @@ public class Brouillon {
 		double denominateur = 0.0;
 		for (int i = 0; i < dim; i++) {
 			if (M[i][s] != 0) {
-				numerateur += U[i][r]* (M[i][s] - SommeElementsInt(U, V, i, s));
+				numerateur += U[i][r]
+						* (M[i][s] - SommeElementsInt(U, V, i, s, r));
+				denominateur += Math.pow(U[i][r], 2);
 			}
-			denominateur += Math.pow(U[i][r], 2);
 		}
 		return numerateur / denominateur;
 	}
 
 	public static double[][] optimizeU(double[][] M, double[][] U, double[][] V) {
-		// let's first copy our matrix		
+		// let's first copy our matrix
 		return null;
 	}
-	
-	public static double[][] copyMatrix(double[][] MAT){
-		int l = MAT.length ;
+
+	/*public static double[][] copyMatrix(double[][] MAT) {
+		int l = MAT.length;
 		int c = MAT[0].length;
 		double[][] copy = new double[l][c];
-		for (int i=0; i<l; i++){
-			for (int j=0; j<c; j++){
-				copy[i][j]=MAT[i][j];
+		for (int i = 0; i < l; i++) {
+			for (int j = 0; j < c; j++) {
+				copy[i][j] = MAT[i][j];
 			}
 		}
 		return copy;
-	}
+	}*/
 
-	
 	public static double[][] optimizeV(double[][] M, double[][] U, double[][] V) {
 		/* Mï¿½thode ï¿½ coder */
 		return null;
