@@ -3,8 +3,8 @@ import java.util.Random;
 public class Brouillon {
 
 	/*
-	 * Inscrivez votre nom complet (pr�nom et nom de famille)
-	 * ainsi que votre num�ro sciper ci-dessous :
+	 * Inscrivez votre nom complet (pr�nom et nom de famille) ainsi que votre
+	 * num�ro sciper ci-dessous :
 	 */
 
 	/* Etudiant 1 */
@@ -17,12 +17,12 @@ public class Brouillon {
 
 	static Random random = new Random();
 
-	public static void main(String [] args){
-		double[][] A = createMatrix(3,3,1,10);
-		double[][] B = createMatrix(3,3,1,10);
-		double[][] M = createMatrix(3,3,1,10);
-		System.out.print(updateUElem(A,B,M,2,3));
-		
+	public static void main(String[] args) {
+		double[][] A = createMatrix(3, 3, 1, 10);
+		double[][] B = createMatrix(3, 3, 1, 10);
+		double[][] M = createMatrix(3, 3, 1, 10);
+		System.out.print(updateUElem(A, B, M, 0, 2));
+
 	}
 
 	public static String matrixToString(double[][] A) {
@@ -61,7 +61,7 @@ public class Brouillon {
 						} else {
 
 							for (i = 0; i < A.length; i++) {
-								for (j = 0; j < A[i].length;j++) {
+								for (j = 0; j < A[i].length; j++) {
 									// System.out.println(A[i][j]);
 									if (A[i][j] == 1) {
 										return false;
@@ -104,62 +104,84 @@ public class Brouillon {
 		} else {
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < m; j++) {
-					mat[i][j] = (random.nextDouble() *(l-k))+k; // (random.nextInt(l - k) + random.nextDouble();
+					mat[i][j] = (random.nextDouble() * (l - k)) + k; // (random.nextInt(l
+																		// - k)
+																		// +
+																		// random.nextDouble();
 				}
 			}
 		}
 		return mat;
 	}
 
-	public static double rmse(double[][] M, double[][] P){
-		int nonNuls=0;
-		double s=0;
-		for (int i=0; i<M.length; i++){
-			for (int j=0; j<M[0].length; j++){
-				if (M[i][j]!=0){
+	public static double rmse(double[][] M, double[][] P) {
+		int nonNuls = 0;
+		double s = 0;
+		for (int i = 0; i < M.length; i++) {
+			for (int j = 0; j < M[0].length; j++) {
+				if (M[i][j] != 0) {
 					nonNuls++;
-					s+= (M[i][j]-P[i][j])*(M[i][j]-P[i][j]);
+					s += (M[i][j] - P[i][j]) * (M[i][j] - P[i][j]);
 				}
 			}
 		}
-		return Math.sqrt(s/nonNuls);
+		return Math.sqrt(s / nonNuls);
 	}
 
-	public static double updateUElem( double[][] M, double[][] U, double[][] V, int r, int s ) {
+	public static double updateUElem(double[][] M, double[][] U, double[][] V,
+			int r, int s) {
 		// somme interieur parenthès
-		double numerator = 0.0;
-		double dentro =0.0;
-		for (int j=0;j<M[0].length;j++){
-			for (int k=0; k<V.length; k++){
-				if (k!=0){
-					dentro += U[r][k]*V[k][j];
-					numerator += V[s][j]*(M[r][j]-dentro);
-				}
+		int dim = V[0].length;
+		double numerateur = 0.0;
+		double denominateur = 0.0;
+		for (int j = 0; j < dim; j++) {
+			if (M[r][j] != 0) {
+				numerateur += V[s][j]* (M[r][j] - SommeElementsInt(U, V, r, j));
+			}
+			denominateur += Math.pow(V[s][j], 2);
+		}
+		return numerateur / denominateur;
+	}
+
+	public static double SommeElementsInt(double[][] U, double[][] V, int r,
+			int j) {
+		int dim = V.length;
+		double somme = 0.0;
+		for (int k = 0; k < dim; k++) {
+			if (k != 0) {
+				somme += U[r][k] * V[k][j];
 			}
 		}
+		return somme;
+
+	}
+
+	public static double updateVElem(double[][] M, double[][] U, double[][] V,
+			int r, int s) {
+		int dim = U.length;
+		double numerateur = 0.0;
 		double denominateur = 0.0;
-		for (int j=0; j<M[0].length; j++){
-			denominateur += (V[s][j])*(V[s][j]);
+		for (int i = 0; i < dim; i++) {
+			if (M[i][s] != 0) {
+				numerateur += U[i][r]* (M[i][s] - SommeElementsInt(U, V, i, s));
+			}
+			denominateur += Math.pow(U[i][r], 2);
 		}
-		return numerator/denominateur;
+		return numerateur / denominateur;
 	}
 
-	public static double updateVElem( double[][] M, double[][] U, double[][] V, int r, int s ) {
+	public static double[][] optimizeU(double[][] M, double[][] U, double[][] V) {
 		/* M�thode � coder */
-		return 0;
+		
+		return null;
 	}
 
-	public static double[][] optimizeU( double[][] M, double[][] U, double[][] V) {
+	public static double[][] optimizeV(double[][] M, double[][] U, double[][] V) {
 		/* M�thode � coder */
 		return null;
 	}
 
-	public static double[][] optimizeV( double[][] M, double[][] U, double[][] V) {
-		/* M�thode � coder */
-		return null;
-	}
-
-	public static int[] recommend( double[][] M, int d) {
+	public static int[] recommend(double[][] M, int d) {
 		/* M�thode � coder */
 		return null;
 	}
