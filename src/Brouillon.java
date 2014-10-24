@@ -60,38 +60,18 @@ public class Brouillon {
 		return stringOfMatrix;
 	}
 
-	public static boolean isMatrix(double[][] A) {
-		if (A == null || A.length == 0) {
-			return false; // checks if A has length 0 1)
-		} else {
-			for (int i = 0; i < A.length; i++) { //
-				if (A[i] == null) { // checks if lines are empty 2)
-					return false; //
-				} else {
-					for (int j = 0; j < A.length; j++) { //
-						if (A[j].length != A[0].length) { // checks if all lines
-															// have the same
-															// length
-							return false; //
-						} else {
-
-							for (i = 0; i < A.length; i++) {
-								for (j = 0; j < A[i].length; j++) {
-									// System.out.println(A[i][j]);
-									if (A[i][j] == 1) {
-										return false;
-									} else {
-										return true;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		return true;
-	}
+    public static boolean isMatrix(double[][] A) {
+        if( A == null || A.length == 0)
+        {
+            return false;
+        }
+        for (int i = 0; i< A.length; ++i)
+        {
+            if (A[i] == null) { return false; }
+            if(A[i].length != A[0].length) { return false; }
+        }
+        return true;
+    }
 
 	public static double[][] multiplyMatrix(double[][] A, double[][] B) {
 		// declare matrix issued by the product
@@ -112,6 +92,16 @@ public class Brouillon {
 		}
 	}
 
+    public static double nbAleatoire( int borneInf, int borneSup)
+    {
+        double value = 0.0;
+        int entier = random.nextInt(borneSup - borneInf +1);
+        value += entier;
+        if (entier != borneSup) {
+            value += random.nextDouble();
+        }
+        return (value);
+    }
 	public static double[][] createMatrix(int n, int m, int k, int l) {
 		double[][] mat = new double[n][m];
 		if (m == 0 || n == 0 || k > l) {
@@ -119,10 +109,8 @@ public class Brouillon {
 		} else {
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < m; j++) {
-					mat[i][j] = (random.nextDouble() * (l - k)) + k; // (random.nextInt(l
-																		// - k)
-																		// +
-																		// random.nextDouble();
+
+                    mat[i][j] = nbAleatoire(k,l);
 				}
 			}
 		}
@@ -136,7 +124,7 @@ public class Brouillon {
 			for (int j = 0; j < M[0].length; j++) {
 				if (M[i][j] != 0) {
 					nonNuls++;
-					s += (M[i][j] - P[i][j]) * (M[i][j] - P[i][j]);
+					s += Math.pow(M[i][j] - P[i][j], 2);
 				}
 			}
 		}
@@ -145,7 +133,7 @@ public class Brouillon {
 
 	public static double updateUElem(double[][] M, double[][] U, double[][] V,
 			int r, int s) {
-		// somme interieur parenthès
+		// somme interieur parenthï¿½s
 		int dim = V[0].length;
 		double numerateur = 0.0;
 		double denominateur = 0.0;
