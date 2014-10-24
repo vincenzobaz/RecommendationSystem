@@ -13,7 +13,7 @@ public class Brouillon {
 
 	/* Etudiant 2 - laissez tel quel si vous avez cod� le projet tout seul */
 	public static String NAME2 = "Gabriel Montauro";
-	public static int SCIPER2 = 123789;
+	public static int SCIPER2 = 247410;
 
 	static Random random = new Random();
 
@@ -63,37 +63,17 @@ public class Brouillon {
 	}
 
 	public static boolean isMatrix(double[][] A) {
-		if (A == null || A.length == 0) {
-			return false; // checks if A has length 0 1)
-		} else {
-			for (int i = 0; i < A.length; i++) { //
-				if (A[i] == null) { // checks if lines are empty 2)
-					return false; //
-				} else {
-					for (int j = 0; j < A.length; j++) { //
-						if (A[j].length != A[0].length) { // checks if all lines
-															// have the same
-															// length
-							return false; //
-						} else {
-
-							for (i = 0; i < A.length; i++) {
-								for (j = 0; j < A[i].length; j++) {
-									// System.out.println(A[i][j]);
-									if (A[i][j] == 1) {
-										return false;
-									} else {
-										return true;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		return true;
-	}
+	       if( A == null || A.length == 0)
+        {
+            return false;
+        }
+        for (int i = 0; i< A.length; ++i)
+        {
+            if (A[i] == null) { return false; }
+            if(A[i].length != A[0].length) { return false; }
+        }
+        return true;
+    }
 
 	public static double[][] multiplyMatrix(double[][] A, double[][] B) {
 		// declare matrix issued by the product
@@ -114,6 +94,16 @@ public class Brouillon {
 		}
 	}
 
+    public static double nbAleatoire( int borneInf, int borneSup)
+    {
+        double value = 0.0;
+        int entier = random.nextInt(borneSup - borneInf +1);
+        value += entier;
+        if (entier != borneSup) {
+            value += random.nextDouble();
+        }
+        return (value);
+    }
 	public static double[][] createMatrix(int n, int m, int k, int l) {
 		double[][] mat = new double[n][m];
 		if (m == 0 || n == 0 || k > l) {
@@ -121,12 +111,14 @@ public class Brouillon {
 		} else {
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < m; j++) {
-					mat[i][j] = (random.nextDouble() * (l - k)) + k;
+
+                    mat[i][j] = nbAleatoire(k,l);
 				}
 			}
 		}
 		return mat;
 	}
+
 
 	public static double rmse(double[][] M, double[][] P) {
 		int lM = M.length;
