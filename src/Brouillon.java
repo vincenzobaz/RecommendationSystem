@@ -13,7 +13,7 @@ public class Brouillon {
 
 	/* Etudiant 2 - laissez tel quel si vous avez cod� le projet tout seul */
 	public static String NAME2 = "Gabriel Montauro";
-	public static int SCIPER2 = 123789;
+	public static int SCIPER2 = 247410;
 
 	static Random random = new Random();
 
