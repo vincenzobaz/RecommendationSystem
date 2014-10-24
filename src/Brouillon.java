@@ -98,7 +98,7 @@ public class Brouillon {
 		double[][] product = new double[A.length][B[0].length];
 		// Check if the multiplication is possible: if A is n*m
 		// and B is o*p, the multiplication is possible only if m=o
-		if (A[0].length != B.length) {
+		if (A[0].length != B.length && isMatrix(A) && isMatrix(B)) {
 			return null;
 		} else {
 			for (int i = 0; i < product.length; i++) {
@@ -130,33 +130,21 @@ public class Brouillon {
 	}
 
 	public static double rmse(double[][] M, double[][] P) {
+		int lM = M.length;
+		int cM = M[0].length;
+		if (lM ==P.length && cM==P[0].length){
 		int nonNuls = 0;
 		double s = 0;
-		for (int i = 0; i < M.length; i++) {
-			for (int j = 0; j < M[0].length; j++) {
+		for (int i = 0; i < lM; i++) {
+			for (int j = 0; j < cM; j++) {
 				if (M[i][j] != 0) {
 					nonNuls++;
 					s += (M[i][j] - P[i][j]) * (M[i][j] - P[i][j]);
 				}
 			}
 		}
-		return Math.sqrt(s / nonNuls);
-	}
-
-	public static double updateUElem(double[][] M, double[][] U, double[][] V,
-			int r, int s) {
-		// somme interieur parenthès
-		int dim = V[0].length;
-		double numerateur = 0.0;
-		double denominateur = 0.0;
-		for (int j = 0; j < dim; j++) {
-			if (M[r][j] != 0) {
-				numerateur += V[s][j]
-						* (M[r][j] - SommeElementsInt(U, V, r, j, s));
-				denominateur += Math.pow(V[s][j], 2);
-			}
-		}
-		return numerateur / denominateur;
+		return Math.sqrt(s / nonNuls);}
+		else {return 3/0;}
 	}
 
 	public static double SommeElementsInt(double[][] U, double[][] V, int r,
@@ -171,6 +159,24 @@ public class Brouillon {
 		return somme;
 
 	}
+	
+	public static double updateUElem(double[][] M, double[][] U, double[][] V,
+			int r, int s) {
+		// somme interieur parenthï¿½s
+		int dim = V[0].length;
+		double numerateur = 0.0;
+		double denominateur = 0.0;
+		for (int j = 0; j < dim; j++) {
+			if (M[r][j] != 0) {
+				numerateur += V[s][j]
+						* (M[r][j] - SommeElementsInt(U, V, r, j, s));
+				denominateur += Math.pow(V[s][j], 2);
+			}
+		}
+		if (denominateur !=0){
+		return numerateur / denominateur;
+		} else {return 0;}		
+	}
 
 	public static double updateVElem(double[][] M, double[][] U, double[][] V,
 			int r, int s) {
@@ -184,11 +190,19 @@ public class Brouillon {
 				denominateur += Math.pow(U[i][r], 2);
 			}
 		}
-		return numerateur / denominateur;
-	}
+		if (denominateur !=0){
+			return numerateur / denominateur;
+			} else {return 0;}		
+		}
 
 	public static double[][] optimizeU(double[][] M, double[][] U, double[][] V) {
-		// let's first copy our matrix
+		int l = U.length;
+		int c = U[0].length;
+		for (int li =0; li<l;li++){
+			for (int co=0; co<c;co++){
+				U[li][co] = updateUElem(M, U, V, li, co);
+			}
+		}
 		return null;
 	}
 
