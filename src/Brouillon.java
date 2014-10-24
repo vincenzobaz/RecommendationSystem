@@ -36,7 +36,9 @@ public class Brouillon {
 				{ 7.582872119819165, 8.61618429201534, 9.099990757435942 },
 				{ 5.827687924464552, 8.173808424325024, 9.813510353524222 },
 				{ 5.514119574095468, 4.186987822600329, 2.222548142372542 }, };
-		System.out.println(updateUElem(A, B, C, 0, 2));
+		System.out.println(matrixToString(C));
+		System.out.println(matrixToString(copyMatrix(C)));
+		// System.out.println(updateUElem(A, B, C, 0, 2));
 
 	}
 
@@ -119,10 +121,7 @@ public class Brouillon {
 		} else {
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < m; j++) {
-					mat[i][j] = (random.nextDouble() * (l - k)) + k; // (random.nextInt(l
-																		// - k)
-																		// +
-																		// random.nextDouble();
+					mat[i][j] = (random.nextDouble() * (l - k)) + k;
 				}
 			}
 		}
@@ -132,19 +131,21 @@ public class Brouillon {
 	public static double rmse(double[][] M, double[][] P) {
 		int lM = M.length;
 		int cM = M[0].length;
-		if (lM ==P.length && cM==P[0].length){
-		int nonNuls = 0;
-		double s = 0;
-		for (int i = 0; i < lM; i++) {
-			for (int j = 0; j < cM; j++) {
-				if (M[i][j] != 0) {
-					nonNuls++;
-					s += (M[i][j] - P[i][j]) * (M[i][j] - P[i][j]);
+		if (lM == P.length && cM == P[0].length) {
+			int nonNuls = 0;
+			double s = 0;
+			for (int i = 0; i < lM; i++) {
+				for (int j = 0; j < cM; j++) {
+					if (M[i][j] != 0) {
+						nonNuls++;
+						s += (M[i][j] - P[i][j]) * (M[i][j] - P[i][j]);
+					}
 				}
 			}
+			return Math.sqrt(s / nonNuls);
+		} else {
+			return 3 / 0;
 		}
-		return Math.sqrt(s / nonNuls);}
-		else {return 3/0;}
 	}
 
 	public static double SommeElementsInt(double[][] U, double[][] V, int r,
@@ -159,7 +160,7 @@ public class Brouillon {
 		return somme;
 
 	}
-	
+
 	public static double updateUElem(double[][] M, double[][] U, double[][] V,
 			int r, int s) {
 		// somme interieur parenth�s
@@ -173,9 +174,11 @@ public class Brouillon {
 				denominateur += Math.pow(V[s][j], 2);
 			}
 		}
-		if (denominateur !=0){
-		return numerateur / denominateur;
-		} else {return 0;}		
+		if (denominateur != 0) {
+			return numerateur / denominateur;
+		} else {
+			return 0;
+		}
 	}
 
 	public static double updateVElem(double[][] M, double[][] U, double[][] V,
@@ -190,23 +193,14 @@ public class Brouillon {
 				denominateur += Math.pow(U[i][r], 2);
 			}
 		}
-		if (denominateur !=0){
+		if (denominateur != 0) {
 			return numerateur / denominateur;
-			} else {return 0;}		
+		} else {
+			return 0;
 		}
-
-	public static double[][] optimizeU(double[][] M, double[][] U, double[][] V) {
-		int l = U.length;
-		int c = U[0].length;
-		for (int li =0; li<l;li++){
-			for (int co=0; co<c;co++){
-				U[li][co] = updateUElem(M, U, V, li, co);
-			}
-		}
-		return null;
 	}
 
-	/*public static double[][] copyMatrix(double[][] MAT) {
+	public static double[][] copyMatrix(double[][] MAT) {
 		int l = MAT.length;
 		int c = MAT[0].length;
 		double[][] copy = new double[l][c];
@@ -216,11 +210,47 @@ public class Brouillon {
 			}
 		}
 		return copy;
-	}*/
+	}
+
+	public static boolean rmseComparison(double[][] M, double[][] P) {
+		double rmseOld = 0;
+		return false;
+	}
+
+	public static double[][] optimizeU(double[][] M, double[][] U, double[][] V) {
+		int l = U.length;
+		int c = U[0].length;
+		double[][] U1 = copyMatrix(U);
+		double rmseOld = 0;
+		double rmseNew = 0;
+		while (Math.abs(rmseNew - rmseOld) < 0.01) {
+			rmseOld = rmse(M, multiplyMatrix(U1, V));
+			for (int li = 0; li < l; li++) {
+				for (int co = 0; co < c; co++) {
+					U1[li][co] = updateUElem(M, U1, V, li, co);
+				}
+			}
+			rmseNew = rmse(M, multiplyMatrix(U1, V));
+		}
+		return U1;
+	}
 
 	public static double[][] optimizeV(double[][] M, double[][] U, double[][] V) {
-		/* M�thode � coder */
-		return null;
+		int l = V.length;
+		int c = V[0].length;
+		double[][] V1 = copyMatrix(U);
+		double rmseOld = 0;
+		double rmseNew = 0;
+		while (Math.abs(rmseNew - rmseOld) < 0.01) {
+			rmseOld = rmse(M, multiplyMatrix(U, V1));
+			for (int li = 0; li < l; li++) {
+				for (int co = 0; co < c; co++) {
+					V1[li][co] = updateVElem(M, U, V1, li, co);
+				}
+			}
+			rmseNew = rmse(M, multiplyMatrix(U, V1));
+		}
+		return V1;
 	}
 
 	public static int[] recommend(double[][] M, int d) {
