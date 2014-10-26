@@ -265,34 +265,80 @@ public class Brouillon {
         : afin de prendre en compte (i) la diff´erence entre les habitudes
         de notation des utilisateurs (par exemple certains seront habituellement plus généreux et attribueront
         de meilleures notes que d’autres) ainsi que (ii) la diff´erence de qualit´e entre les articles (par exemple,
-        certains films auront une note moyenne bien meilleure que les autres)
+        certains films auront une note moyenne bien meilleure que les autres), l’algorithme UV-decomposition
+        incorpore habituellement une ´etape de pre-traitement des donn´ees d’entr´ee. Dans un souci de sim-
+        plification, nous ne mettrons pas en oeuvre cette ´etape dans le mini-projet
          */
-
         /*
         Initialisation de U et V : un point de d´epart simple consiste `a donner la mˆeme valeur (par exemple
-v = 1) `a tous les ´el´ements.
-Un choix judicieux pour cette valeur v sera tel que les ´el´ements de la matrice produit U ·V atteignent
-la moyenne des ´el´ements non nuls de M. Cette valeur v peut ˆetre obtenue en calculant d’abord la
-moyenne de tous les ´el´ements non nuls de M puis en divisant cette moyenne par d (nombre d’articles)
-et en prenant la racine carr´ee de cette valeur :
+        v = 1) `a tous les ´el´ements.
+        Un choix judicieux pour cette valeur v sera tel que les ´el´ements de la matrice produit U ·V atteignent
+        la moyenne des ´el´ements non nuls de M. Cette valeur v peut ˆetre obtenue en calculant d’abord la
+        moyenne de tous les ´el´ements non nuls de M puis en divisant cette moyenne par d (nombre d’articles)
+        et en prenant la racine carr´ee de cette valeur :
 
-v = racine carrée de (( (somme des ij de la matrice M[i][j]) divisé par n) divisé par d )
+        v = racine carrée de (( (somme des ij de la matrice M[i][j]) divisé par n) divisé par d )
 
-ou la somme de la matrice M[i][j]
-d´esigne la somme sur tous les i, j = (1, 1), . . . telle que mij est non-nulle
-et n le nombre de ces entr´ees non-nulles. Comme mentionn´e pr´ec´edemment, pour augmenter nos
-chances de converger vers un minimum global, il est bon de calculer la d´ecomposition en partant de
-diff´erents points de d´epart.
-Il est possible d’obtenir diff´erents points pour U et V en perturbant la valeur v al´eatoirement et de
-fa¸con ind´ependante pour chacun des ´el´ements. Dans le cadre de ce mini-projet, vous choisirez quelques
-points de d´epart diff´erents et retournerez les r´esultats relatifs au point ayant permis d’atteindre le
-plus faible RMSE.
+        ou la somme de la matrice M[i][j]
+        d´esigne la somme sur tous les i, j = (1, 1), . . . telle que mij est non-nulle
+        et n le nombre de ces entr´ees non-nulles. Comme mentionn´e pr´ec´edemment, pour augmenter nos
+        chances de converger vers un minimum global, il est bon de calculer la d´ecomposition en partant de
+        diff´erents points de d´epart.
+        Il est possible d’obtenir diff´erents points pour U et V en perturbant la valeur v al´eatoirement et de
+        fa¸con ind´ependante pour chacun des ´el´ements. Dans le cadre de ce mini-projet, vous choisirez quelques
+        points de d´epart diff´erents et retournerez les r´esultats relatifs au point ayant permis d’atteindre le
+        plus faible RMSE.
          */
+        double sommeM = 0.0;
+        int    nbM = 0;
+        int    nbPointsDeparts = 50;
+
+        // calcul de la valeur initiale des matrices U et V en prenant la racine de la moyenne des Mij
+        for(int i =0;i<M.length; ++i) {
+            for (int j = 0; j < M[0].length; ++j) {
+                if (M[i][j] != 0) {
+                    sommeM += M[i][j];
+                    ++nbM;
+                }
+            }
+        }
+        double v = Math.sqrt(( sommeM/nbM )/d);
+
+        // déclaration des matrices
+        double[][] uMatrix;
+        double[][] vMatrix;
+        double[][] P;
+
+        double[][] minUMatrix;
+        double[][] minVMatrix;
+        double[][] minP = createMatrix( M.length,  M[0].length, Integer.MAX_VALUE, Integer.MAX_VALUE);
+
 
         /*
         Ajustement de U et V et d´ecision de quand arrˆeter
          */
 
+        for(int c = 0; c < nbPointsDeparts; ++c)
+        {
+            uMatrix = createMatrix(M.length, d, 0, 2*(int)v);
+            vMatrix = createMatrix(d,M[0].length, 0 ,2*(int)v);
+            P = multiplyMatrix(optimizeV(M, vMatrix, vMatrix), optimizeU(M, uMatrix, vMatrix));
+
+            if(c == 0 ||  rmse(M,minP) > rmse(M,P))
+            {
+                minUMatrix = copyMatrix(uMatrix);
+                minVMatrix = copyMatrix(vMatrix);
+                minP = multiplyMatrix(minUMatrix,minVMatrix);
+            }
+        }
+
+        /*
+        Elle retournera un tableau d’entiers indiquant
+        `a la position i, la meilleure recommandation de l’utilisateur i. Un article ne sera recommand´e que si (i) il
+        n’´etait pas not´e par i (l’entr´ee correspondante dans M valait z´ero au d´epart) et (ii) qu’il est recommand´e par
+        l’algorithme UV-decomposition utilisant la dimension d pour M (cet article a le plus haut score parmi ceux
+        qui n’´etait pas not´es au d´epart). S’il n’y a pas de tel article la valeur retourn´ee sera −1 pour l’utilisateur i.
+         */
 
 		// int[] rec = new 
 		return null;
