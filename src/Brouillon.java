@@ -143,7 +143,7 @@ public class Brouillon {
 			}
 			return Math.sqrt(s / nonNuls);
 		} else {
-			return 3 / 0;
+			return (-1);
 		}
 	}
 
@@ -161,11 +161,7 @@ public class Brouillon {
 	}
 
 	public static boolean testMatrix(double[][] M, double[][] U, double[][] V) {
-		if (isMatrix(M) && isMatrix(U) && isMatrix(V)) {
-			return true;
-		} else {
-			return false;
-		}
+        return isMatrix(M) && isMatrix(U) && isMatrix(V);
 	}
 
 	public static double updateUElem(double[][] M, double[][] U, double[][] V,
@@ -265,6 +261,39 @@ public class Brouillon {
 	}
 
 	public static int[] recommend(double[][] M, int d) {
+        /* Pre-traitement de la matrice M
+        : afin de prendre en compte (i) la diff´erence entre les habitudes
+        de notation des utilisateurs (par exemple certains seront habituellement plus généreux et attribueront
+        de meilleures notes que d’autres) ainsi que (ii) la diff´erence de qualit´e entre les articles (par exemple,
+        certains films auront une note moyenne bien meilleure que les autres)
+         */
+
+        /*
+        Initialisation de U et V : un point de d´epart simple consiste `a donner la mˆeme valeur (par exemple
+v = 1) `a tous les ´el´ements.
+Un choix judicieux pour cette valeur v sera tel que les ´el´ements de la matrice produit U ·V atteignent
+la moyenne des ´el´ements non nuls de M. Cette valeur v peut ˆetre obtenue en calculant d’abord la
+moyenne de tous les ´el´ements non nuls de M puis en divisant cette moyenne par d (nombre d’articles)
+et en prenant la racine carr´ee de cette valeur :
+
+v = racine carrée de (( (somme des ij de la matrice M[i][j]) divisé par n) divisé par d )
+
+ou la somme de la matrice M[i][j]
+d´esigne la somme sur tous les i, j = (1, 1), . . . telle que mij est non-nulle
+et n le nombre de ces entr´ees non-nulles. Comme mentionn´e pr´ec´edemment, pour augmenter nos
+chances de converger vers un minimum global, il est bon de calculer la d´ecomposition en partant de
+diff´erents points de d´epart.
+Il est possible d’obtenir diff´erents points pour U et V en perturbant la valeur v al´eatoirement et de
+fa¸con ind´ependante pour chacun des ´el´ements. Dans le cadre de ce mini-projet, vous choisirez quelques
+points de d´epart diff´erents et retournerez les r´esultats relatifs au point ayant permis d’atteindre le
+plus faible RMSE.
+         */
+
+        /*
+        Ajustement de U et V et d´ecision de quand arrˆeter
+         */
+
+
 		// int[] rec = new 
 		return null;
 	}
