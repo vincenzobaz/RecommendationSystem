@@ -340,7 +340,23 @@ public class Brouillon {
         qui n’´etait pas not´es au d´epart). S’il n’y a pas de tel article la valeur retourn´ee sera −1 pour l’utilisateur i.
          */
 
-		// int[] rec = new 
-		return null;
+        int[] recomendation = new int[M.length];
+        for(int i = 0; i< M.length; ++i)
+        {
+            double noteMax = -1;
+            for(int j = 0; j<M[0].length; ++j)
+            {
+                if(M[i][j] == 0 && minP[i][j] > noteMax)
+                {
+                    noteMax = minP[i][j];
+                    recomendation[i] = j;
+                }
+            }
+            if(noteMax == -1)
+            {
+                recomendation[i] = -1;
+            }
+        }
+		return recomendation;
 	}
 }
