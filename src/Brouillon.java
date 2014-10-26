@@ -18,34 +18,49 @@ public class Brouillon {
 	static Random random = new Random();
 
 	public static void main(String[] args) {
-	
+
 		double[][] U = {
-				   {8.08913800106962,5.05627494744083,9.598397316101263,1.6822793129006564,7.764047676487541},
-				   {4.245086600455049,5.142733874403485,0.4405678243720602,9.35243284779836,4.21819246858373},
-				   {3.018191867513211,3.1401368814769226,4.316456384200197,4.578519051642979,1.1743136333569029},
-				};
+				{ 8.08913800106962, 5.05627494744083, 9.598397316101263,
+						1.6822793129006564, 7.764047676487541 },
+				{ 4.245086600455049, 5.142733874403485, 0.4405678243720602,
+						9.35243284779836, 4.21819246858373 },
+				{ 3.018191867513211, 3.1401368814769226, 4.316456384200197,
+						4.578519051642979, 1.1743136333569029 }, };
 		double[][] V = {
-			   {5.375746296015116,1.4309469514339548,0.5595298669872125,9.203863800821644,9.354921557931279,0.8737552795622023,4.075174367738776,0.9380864362509004},
-			   {5.144248961808988,5.445168242337555,7.289100330868699,9.344032328893181,3.378025268119843,8.297006044981499,2.5794969241602104,4.04737142593797},
-			   {9.585217690741807,3.9929501748593528,3.7741852472134627,6.131714808662718,1.2482590060361831,8.52994134424959,3.210400688900191,6.496486542561843},
-			   {6.2687155859214165,3.509939434255901,8.000941321755501,3.303283691014893,6.419577628821836,3.767612893424183,0.6881794326887898,5.2657955053655865},
-			   {5.835467959891577,7.9101635656306355,2.6744225045779735,9.397943982854352,8.588452477270106,1.8099084780314207,6.7252111333513,9.533063572247581},
-			};
-		double[][] P = multiplyMatrix(U,V);
-		// System.out.println("U"+matrixToString(U));
-		//System.out.println("V"+matrixToString(V));
-		//System.out.println("P"+matrixToString(P));
+				{ 5.375746296015116, 1.4309469514339548, 0.5595298669872125,
+						9.203863800821644, 9.354921557931279,
+						0.8737552795622023, 4.075174367738776,
+						0.9380864362509004 },
+				{ 5.144248961808988, 5.445168242337555, 7.289100330868699,
+						9.344032328893181, 3.378025268119843,
+						8.297006044981499, 2.5794969241602104, 4.04737142593797 },
+				{ 9.585217690741807, 3.9929501748593528, 3.7741852472134627,
+						6.131714808662718, 1.2482590060361831,
+						8.52994134424959, 3.210400688900191, 6.496486542561843 },
+				{ 6.2687155859214165, 3.509939434255901, 8.000941321755501,
+						3.303283691014893, 6.419577628821836,
+						3.767612893424183, 0.6881794326887898,
+						5.2657955053655865 },
+				{ 5.835467959891577, 7.9101635656306355, 2.6744225045779735,
+						9.397943982854352, 8.588452477270106,
+						1.8099084780314207, 6.7252111333513, 9.533063572247581 }, };
+		double[][] P = multiplyMatrix(U, V);
 		double[][] M = {
-				   {217.35120055712812,0,111.83210115139235,0,182.21543904294015,151.2840298878336,130.19456476660213,0},
-				   {136.7418190254157,102.02977550907978,127.63343580704291,0,153.90109412457005,93.00736746616745,0,117.11925105433482},
-				   {109.30695706186455,0,80.64172036262428,109.74812799983994,83.70816076465455,84.88550315153297,0,78.88677751597301},
-				};
-		
+				{ 217.35120055712812, 0, 111.83210115139235, 0,
+						182.21543904294015, 151.2840298878336,
+						130.19456476660213, 0 },
+				{ 136.7418190254157, 102.02977550907978, 127.63343580704291, 0,
+						153.90109412457005, 93.00736746616745, 0,
+						117.11925105433482 },
+				{ 109.30695706186455, 0, 80.64172036262428, 109.74812799983994,
+						83.70816076465455, 84.88550315153297, 0,
+						78.88677751597301 }, };
+
 		int[] fine = recommend(M, 2);
-		for (int i=0; i<fine.length; i++){
+		for (int i = 0; i < fine.length; i++) {
 			System.out.println(fine[i]);
 		}
-		
+
 	}
 
 	public static String matrixToString(double[][] A) {
@@ -83,12 +98,24 @@ public class Brouillon {
 		return true;
 	}
 
+	public static boolean multiplicationPossible(double[][] A, double[][] B) {
+		if (isMatrix(A) && isMatrix(B)) {
+			if (A[0].length == B.length) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
 	public static double[][] multiplyMatrix(double[][] A, double[][] B) {
 		// declare matrix issued by the product
 		double[][] product = new double[A.length][B[0].length];
 		// Check if the multiplication is possible: if A is n*m
 		// and B is o*p, the multiplication is possible only if m=o
-		if (A[0].length != B.length && isMatrix(A) && isMatrix(B)) {
+		if (multiplicationPossible(A, B)) {
 			return null;
 		} else {
 			for (int i = 0; i < product.length; i++) {
@@ -143,7 +170,7 @@ public class Brouillon {
 			}
 			return Math.sqrt(s / nonNuls);
 		} else {
-			return 3 / 0;
+			return 0.0;
 		}
 	}
 
@@ -194,21 +221,24 @@ public class Brouillon {
 	public static double updateVElem(double[][] M, double[][] U, double[][] V,
 			int r, int s) {
 		if (testMatrix(M, U, V)) {
-		int dim = U.length;
-		double numerateur = 0.0;
-		double denominateur = 0.0;
-		for (int i = 0; i < dim; i++) {
-			if (M[i][s] != 0) {
-				numerateur += U[i][r]
-						* (M[i][s] - SommeElementsInt(U, V, i, s, r));
-				denominateur += Math.pow(U[i][r], 2);
+			int dim = U.length;
+			double numerateur = 0.0;
+			double denominateur = 0.0;
+			for (int i = 0; i < dim; i++) {
+				if (M[i][s] != 0) {
+					numerateur += U[i][r]
+							* (M[i][s] - SommeElementsInt(U, V, i, s, r));
+					denominateur += Math.pow(U[i][r], 2);
+				}
 			}
-		}
-		if (denominateur != 0) {
-			return numerateur / denominateur;
+			if (denominateur != 0) {
+				return numerateur / denominateur;
+			} else {
+				return 0;
+			}
 		} else {
 			return 0;
-		}} else {return 0;}
+		}
 	}
 
 	public static double[][] copyMatrix(double[][] MAT) {
@@ -223,49 +253,52 @@ public class Brouillon {
 		return copy;
 	}
 
-	public static boolean rmseComparison(double[][] M, double[][] P) {
-		double rmseOld = 0;
-		return false;
-	}
-
 	public static double[][] optimizeU(double[][] M, double[][] U, double[][] V) {
-		int l = U.length;
-		int c = U[0].length;
-		double[][] U1 = copyMatrix(U);
-		double rmseOld = 0;
-		double rmseNew = 0;
-		while (Math.abs(rmseNew - rmseOld) > Math.pow(10, (-6))) {
-			rmseOld = rmse(M, multiplyMatrix(U1, V));
-			for (int li = 0; li < l; li++) {
-				for (int co = 0; co < c; co++) {
-					U1[li][co] = updateUElem(M, U1, V, li, co);
+		if (multiplicationPossible(U, V)) {
+			int l = U.length;
+			int c = U[0].length;
+			double[][] U1 = copyMatrix(U);
+			double rmseOld = 0;
+			double rmseNew = 0;
+			while (Math.abs(rmseNew - rmseOld) > Math.pow(10, (-6))) {
+				rmseOld = rmse(M, multiplyMatrix(U1, V));
+				for (int li = 0; li < l; li++) {
+					for (int co = 0; co < c; co++) {
+						U1[li][co] = updateUElem(M, U1, V, li, co);
+					}
 				}
+				rmseNew = rmse(M, multiplyMatrix(U1, V));
 			}
-			rmseNew = rmse(M, multiplyMatrix(U1, V));
+			return U1;
+		} else {
+			return null;
 		}
-		return U1;
 	}
 
 	public static double[][] optimizeV(double[][] M, double[][] U, double[][] V) {
-		int l = V.length;
-		int c = V[0].length;
-		double[][] V1 = copyMatrix(U);
-		double rmseOld = 0;
-		double rmseNew = 0;
-		while (Math.abs(rmseNew - rmseOld) > Math.pow(10, (-6))) {
-			rmseOld = rmse(M, multiplyMatrix(U, V1));
-			for (int li = 0; li < l; li++) {
-				for (int co = 0; co < c; co++) {
-					V1[li][co] = updateVElem(M, U, V1, li, co);
+		if (multiplicationPossible(U, V)) {
+			int l = V.length;
+			int c = V[0].length;
+			double[][] V1 = copyMatrix(U);
+			double rmseOld = 0;
+			double rmseNew = 0;
+			while (Math.abs(rmseNew - rmseOld) > Math.pow(10, (-6))) {
+				rmseOld = rmse(M, multiplyMatrix(U, V1));
+				for (int li = 0; li < l; li++) {
+					for (int co = 0; co < c; co++) {
+						V1[li][co] = updateVElem(M, U, V1, li, co);
+					}
 				}
+				rmseNew = rmse(M, multiplyMatrix(U, V1));
 			}
-			rmseNew = rmse(M, multiplyMatrix(U, V1));
+			return V1;
+		} else {
+			return null;
 		}
-		return V1;
 	}
 
 	public static int[] recommend(double[][] M, int d) {
-		// int[] rec = new 
+		// 1int[] rec = new
 		return null;
 	}
 }
