@@ -88,7 +88,7 @@ public class Brouillon {
 		double[][] product = new double[A.length][B[0].length];
 		// Check if the multiplication is possible: if A is n*m
 		// and B is o*p, the multiplication is possible only if m=o
-		if (A[0].length != B.length && !isMatrix(A) && !isMatrix(B)) {
+		if (A[0].length != B.length && isMatrix(A) && isMatrix(B)) {
 			return null;
 		} else {
 			for (int i = 0; i < product.length; i++) {
@@ -105,7 +105,7 @@ public class Brouillon {
 	public static double nbAleatoire(int borneInf, int borneSup) {
 		double value = 0.0;
 		int entier = random.nextInt(borneSup - borneInf + 1);
-		value += entier + borneInf;
+		value += entier;
 		if (entier != borneSup) {
 			value += random.nextDouble();
 		}
@@ -141,12 +141,10 @@ public class Brouillon {
 					}
 				}
 			}
-            if(nonNuls != 0)
-            {
-                return Math.sqrt(s / nonNuls);
-            }
-		}
+			return Math.sqrt(s / nonNuls);
+		} else {
 			return (-1);
+		}
 	}
 
 	public static double SommeElementsInt(double[][] U, double[][] V, int r,
@@ -232,25 +230,25 @@ public class Brouillon {
 		double[][] U1 = copyMatrix(U);
 		double rmseOld = 0;
 		double rmseNew = 0;
-		do {
-            rmseOld = rmse(M, multiplyMatrix(U1, V));
+		while (Math.abs(rmseNew - rmseOld) > Math.pow(10, (-6))) {
+			rmseOld = rmse(M, multiplyMatrix(U1, V));
 			for (int li = 0; li < l; li++) {
 				for (int co = 0; co < c; co++) {
 					U1[li][co] = updateUElem(M, U1, V, li, co);
 				}
 			}
 			rmseNew = rmse(M, multiplyMatrix(U1, V));
-		}while (Math.abs(rmseNew - rmseOld) > Math.pow(10, (-6)));
+		}
 		return U1;
 	}
 
 	public static double[][] optimizeV(double[][] M, double[][] U, double[][] V) {
 		int l = V.length;
 		int c = V[0].length;
-		double[][] V1 = copyMatrix(V);
+		double[][] V1 = copyMatrix(U);
 		double rmseOld = 0;
 		double rmseNew = 0;
-		do {
+		while (Math.abs(rmseNew - rmseOld) > Math.pow(10, (-6))) {
 			rmseOld = rmse(M, multiplyMatrix(U, V1));
 			for (int li = 0; li < l; li++) {
 				for (int co = 0; co < c; co++) {
@@ -258,7 +256,7 @@ public class Brouillon {
 				}
 			}
 			rmseNew = rmse(M, multiplyMatrix(U, V1));
-		}while(Math.abs(rmseNew - rmseOld) > Math.pow(10, (-6)));
+		}
 		return V1;
 	}
 
@@ -342,23 +340,7 @@ public class Brouillon {
         qui n’´etait pas not´es au d´epart). S’il n’y a pas de tel article la valeur retourn´ee sera −1 pour l’utilisateur i.
          */
 
-        int[] recomendation = new int[M.length];
-        for(int i = 0; i< M.length; ++i)
-        {
-            double noteMax = -1;
-            for(int j = 0; j<M[0].length; ++j)
-            {
-                if(M[i][j] == 0 && minP[i][j] > noteMax)
-                {
-                    noteMax = minP[i][j];
-                    recomendation[i] = j;
-                }
-            }
-            if(noteMax == -1)
-            {
-                recomendation[i] = -1;
-            }
-        }
-		return recomendation;
+		// int[] rec = new 
+		return null;
 	}
 }
