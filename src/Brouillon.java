@@ -31,7 +31,7 @@ public class Brouillon {
 			   {6.2687155859214165,3.509939434255901,8.000941321755501,3.303283691014893,6.419577628821836,3.767612893424183,0.6881794326887898,5.2657955053655865},
 			   {5.835467959891577,7.9101635656306355,2.6744225045779735,9.397943982854352,8.588452477270106,1.8099084780314207,6.7252111333513,9.533063572247581},
 			};
-		double[][] P = multiplyMatrix(U,V);
+		//double[][] P = multiplyMatrix(U,V);
 		// System.out.println("U"+matrixToString(U));
 		//System.out.println("V"+matrixToString(V));
 		//System.out.println("P"+matrixToString(P));
@@ -88,12 +88,12 @@ public class Brouillon {
 		double[][] product = new double[A.length][B[0].length];
 		// Check if the multiplication is possible: if A is n*m
 		// and B is o*p, the multiplication is possible only if m=o
-        if (A[0].length != B.length && !isMatrix(A) && !isMatrix(B)) {
+        if (A[0].length != B.length  || !isMatrix(A) || !isMatrix(B)) {
 			return null;
 		} else {
 			for (int i = 0; i < product.length; i++) {
-				for (int j = 0; j < product[i].length; j++) {
-					for (int x = 0; x < A[i].length; x++) {
+				for (int j = 0; j < product[0].length; j++) {
+					for (int x = 0; x < A[0].length; x++) {
 						product[i][j] += A[i][x] * B[x][j];
 					}
 				}
@@ -191,7 +191,7 @@ public class Brouillon {
 
 	public static double updateVElem(double[][] M, double[][] U, double[][] V,
 			int r, int s) {
-		if (testMatrix(M, U, V)) {
+		if (testMatrix(M, U, V)) { // ce test me semble de trop car il revient dans la procédure de update element à chaque fois.
 		int dim = U.length;
 		double numerateur = 0.0;
 		double denominateur = 0.0;
@@ -247,7 +247,7 @@ public class Brouillon {
 	public static double[][] optimizeV(double[][] M, double[][] U, double[][] V) {
 		int l = V.length;
 		int c = V[0].length;
-		double[][] V1 = copyMatrix(U);
+		double[][] V1 = copyMatrix(V);
 		double rmseOld = 0;
 		double rmseNew = 0;
 		do  {
@@ -324,7 +324,7 @@ public class Brouillon {
         {
             uMatrix = createMatrix(M.length, d, 0, 2*(int)v);
             vMatrix = createMatrix(d,M[0].length, 0 ,2*(int)v);
-            P = multiplyMatrix(optimizeV(M, vMatrix, vMatrix), optimizeU(M, uMatrix, vMatrix));
+            P = multiplyMatrix(optimizeU(M, uMatrix, vMatrix) ,optimizeV(M, uMatrix, vMatrix));
 
             if(c == 0 ||  rmse(M,minP) > rmse(M,P))
             {
