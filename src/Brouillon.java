@@ -43,7 +43,7 @@ public class Brouillon {
 		
 		int[] fine = recommend(M, 2);
 		for (int i=0; i<fine.length; i++){
-			System.out.println(fine[i]);
+			System.out.println("l'élément recommandé est à la position : ("+ i +";" +fine[i]+")") ;
 		}
 		
 	}
@@ -230,8 +230,8 @@ public class Brouillon {
 		int l = U.length;
 		int c = U[0].length;
 		double[][] U1 = copyMatrix(U);
-		double rmseOld = 0;
-		double rmseNew = 0;
+		double rmseOld;
+		double rmseNew;
 		do {
 			rmseOld = rmse(M, multiplyMatrix(U1, V));
 			for (int li = 0; li < l; li++) {
@@ -248,8 +248,8 @@ public class Brouillon {
 		int l = V.length;
 		int c = V[0].length;
 		double[][] V1 = copyMatrix(V);
-		double rmseOld = 0;
-		double rmseNew = 0;
+		double rmseOld;
+		double rmseNew;
 		do  {
 			rmseOld = rmse(M, multiplyMatrix(U, V1));
 			for (int li = 0; li < l; li++) {
@@ -293,7 +293,7 @@ public class Brouillon {
          */
         double sommeM = 0.0;
         int    nbM = 0;
-        int    nbPointsDeparts = 50;
+        int    nbPointsDeparts = 500;
 
         // calcul de la valeur initiale des matrices U et V en prenant la racine de la moyenne des Mij
         for(int i =0;i<M.length; ++i) {
@@ -322,10 +322,16 @@ public class Brouillon {
 
         for(int c = 0; c < nbPointsDeparts; ++c)
         {
-            uMatrix = createMatrix(M.length, d, 0, 2*(int)v);
-            vMatrix = createMatrix(d,M[0].length, 0 ,2*(int)v);
-            P = multiplyMatrix(optimizeU(M, uMatrix, vMatrix) ,optimizeV(M, uMatrix, vMatrix));
-
+            double tmpRmse;
+            double Rmse = 0;
+            uMatrix = createMatrix(M.length, d, 0, 3*(int)v);
+            vMatrix = createMatrix(d,M[0].length, 0 ,3*(int)v);
+            // peut être mettre ceci dans une boucle pour optimiser P
+           // do{
+           //     tmpRmse = Rmse;
+                P = multiplyMatrix(optimizeU(M, uMatrix, vMatrix) ,optimizeV(M, uMatrix, vMatrix));
+           //     Rmse = rmse(M,P);
+           // }while((tmpRmse - Rmse  > Math.pow(10,(-9))));
             if(c == 0 ||  rmse(M,minP) > rmse(M,P))
             {
                 minUMatrix = copyMatrix(uMatrix);
@@ -342,7 +348,23 @@ public class Brouillon {
         qui n’´etait pas not´es au d´epart). S’il n’y a pas de tel article la valeur retourn´ee sera −1 pour l’utilisateur i.
          */
 
-		// int[] rec = new 
-		return null;
+        int[] recomendation = new int[M.length];
+        for(int i = 0; i< M.length; ++i)
+        {
+            double noteMax = -1;
+            for(int j = 0; j<M[0].length; ++j)
+            {
+                if(M[i][j] == 0 && minP[i][j] > noteMax)
+                {
+                    noteMax = minP[i][j];
+                    recomendation[i] = j;
+                }
+            }
+            if(noteMax == -1)
+            {
+                recomendation[i] = -1;
+            }
+        }
+        return recomendation;
 	}
 }
