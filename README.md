@@ -13,5 +13,5 @@ Ce README.MD  va être un peu une TODO LIST : on va noter ce que nous avons fait
 7. `updateVElem`	   ok
 8. `optimizeU`       ok
 9. `optimizeV`       ok
-10. `recommend`
+10. `recommend`      ok
 11. Overall commenting to help the nasty  assistants correcting.
