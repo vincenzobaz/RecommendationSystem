@@ -561,11 +561,11 @@ public class Brouillon {
 	// cette m√©thode n'est jamais utilis√©e. mais elle est utile pour √©crire
 	// des matrices test
 	public static String matrixToString(double[][] A) {
+		// declaration du string
 		String stringOfMatrix = "{" + "\n";
-
+		// Remplissage en ajoutant les accolades et les retours ‡ la ligne
 		for (int i = 0; i < A.length; i++) {
 			stringOfMatrix += "  " + '{';
-
 			for (int j = 0; j < A[i].length; j++) {
 				if (j == A[i].length - 1) {
 					stringOfMatrix = stringOfMatrix + A[i][j];
@@ -580,28 +580,34 @@ public class Brouillon {
 	}
 
 	public static boolean isMatrix(double[][] A) {
-		if (A == null || A.length == 0) {
+		if (A == null || A.length == 0) { // la matrice est nulle ou sa taille
+											// =0?
 			return false;
 		}
-		for (int i = 0; i < A.length; ++i) {
+		for (int i = 0; i < A.length; ++i) { // la matrice contient des lignes
+												// nulles?
 			if (A[i] == null) {
 				return false;
 			}
-			if (A[i].length != A[0].length) {
+			if (A[i].length != A[0].length) { // la matrice contient des
+												// positions vides?
 				return false;
 			}
 		}
 		return true;
 	}
 
-	// on pourrait tenter d'impl√©menter la m√©thode de multiplication par blocs
-	// vue en Alg√®bre lin√©aire
 	public static double[][] multiplyMatrix(double[][] A, double[][] B) {
 		// declare matrix issued by the product
 		double[][] product = new double[A.length][B[0].length];
 		// Check if the multiplication is possible: if A is n*m
 		// and B is o*p, the multiplication is possible only if m=o
-		if (A[0].length != B.length || !isMatrix(A) || !isMatrix(B)) {
+		if (A[0].length != B.length || !isMatrix(A) || !isMatrix(B)) { // remplissage
+																		// en
+																		// utilisant
+																		// la
+																		// mÈthode
+																		// "ligne-colonne"
 			return null;
 		} else {
 			for (int i = 0; i < product.length; i++) {
@@ -615,9 +621,6 @@ public class Brouillon {
 		}
 	}
 
-	// j'ai ajout√© une autre fonction nombre al√©atoire. pour qu'elle prenne
-	// des double.
-	// elle ne respecte pas les conditions demand√©es!!
 	public static double nbAleatoire(double borneInf, double borneSup) {
 
 		return (borneInf + random.nextDouble() * (borneSup - borneInf));
@@ -633,22 +636,7 @@ public class Brouillon {
 		return (value);
 	}
 
-	public static double[][] createMatrix(int n, int m, int k, int l) {
-		double[][] mat = new double[n][m];
-		if (m == 0 || n == 0 || k > l) {
-			return null;
-		} else {
-			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < m; j++) {
-
-					mat[i][j] = nbAleatoire(k, l);
-				}
-			}
-		}
-		return mat;
-	}
-
-	// j/ai eu besoin de c√©er une nouvelle m√©thode pour les matrices.
+	// j/ai eu besoin de cÈer une nouvelle mÈthode pour les matrices. Utilisation de la surcharge.
 	public static double[][] createMatrix(int n, int m, double k, double l) {
 		double[][] mat = new double[n][m];
 		if (m == 0 || n == 0 || k > l) {
@@ -656,6 +644,22 @@ public class Brouillon {
 		} else {
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < m; j++) {
+					mat[i][j] = nbAleatoire(k, l);
+				}
+			}
+		}
+		return mat;
+	}
+
+	public static double[][] createMatrix(int n, int m, int k, int l) {
+		// declaration de la matrice
+		double[][] mat = new double[n][m];
+		// remplissage de la matrice avec valeurs alÈatoires dans l'intervalle
+		if (m == 0 || n == 0 || k > l) {
+			return null;
+		} else {
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < m; j++) {
 
 					mat[i][j] = nbAleatoire(k, l);
 				}
@@ -664,29 +668,33 @@ public class Brouillon {
 		return mat;
 	}
 
-	// cette m√©thode est extr√®mement importante dans notre programme et elle
-	// n'est pas comment√©e.
 	public static double rmse(double[][] M, double[][] P) {
+		// stockage des dimensions de la matrice M pour eviter de les calculer 3
+		// fois
 		int lM = M.length;
 		int cM = M[0].length;
 		if (lM == P.length && cM == P[0].length) {
-			int nonNuls = 0;
-			double s = 0;
+			int nonNuls = 0; // compteur de valeurs non nulles
+			double sum = 0; // valeur contenant la valeur de la some
+			// calcul de la somme des carrÈs
 			for (int i = 0; i < lM; i++) {
 				for (int j = 0; j < cM; j++) {
 					if (M[i][j] != 0) {
 						nonNuls++;
-						s += Math.pow(P[i][j] - M[i][j], 2);
+						sum += Math.pow(P[i][j] - M[i][j], 2);
 					}
 				}
 			}
 			if (nonNuls != 0) {
-				return Math.sqrt(s / nonNuls);
+				return Math.sqrt(sum / nonNuls);
 			}
 		}
 		return (-1);
 	}
 
+	// methode crÈe pour calculer la somme ‡ l'intÈrieur de la parenthËse des
+	// formules pour optimiser un ÈlÈment de V ou U. Cela nous permet de ne pas
+	// rÈpeter du code.
 	public static double SommeElementsInt(double[][] U, double[][] V, int r,
 			int j, int valInterdite) {
 		int dim = V.length;
@@ -699,6 +707,8 @@ public class Brouillon {
 		return somme;
 	}
 
+	// petite methode pour tester si trois double tableaux de doubles sont des
+	// matrices. Cela permet d'avoir deux methodes updateU/VElem plus lisibles
 	public static boolean testMatrix(double[][] M, double[][] U, double[][] V) {
 		return isMatrix(M) && isMatrix(U) && isMatrix(V);
 	}
@@ -749,6 +759,8 @@ public class Brouillon {
 		}
 	}
 
+	// methode qui permet de copier une matrice. Utile soit pour debugging (test
+	// methodes optimize) que pour methode recommend
 	public static double[][] copyMatrix(double[][] MAT) {
 		int l = MAT.length;
 		int c = MAT[0].length;
@@ -761,32 +773,15 @@ public class Brouillon {
 		return copy;
 	}
 
-	// le code comparison n'√©tait jamais utilis√©.
-	/*
-	 * public static boolean rmseComparison(double[][] M, double[][] P) { double
-	 * rmseOld = 0; return false; }
-	 */
-
-	// j'ai pens√© qu'il √©tait pr√©f√©rable d'optimiser les matrices l'une
-	// apr√®s l'autre
-	// j'ai donc mis en commentaire le code qui permettait d'it√©rer
-	// l'optimisation
-	// et l'ai ajout√© dans le recommend.
 	public static double[][] optimizeU(double[][] M, double[][] U, double[][] V) {
 		int l = U.length;
 		int c = U[0].length;
 		double[][] U1 = copyMatrix(U);
-		// double rmseOld;
-		// double rmseNew;
-		// do {
-		// rmseOld = rmse(M, multiplyMatrix(U1, V));
 		for (int li = 0; li < l; li++) {
 			for (int co = 0; co < c; co++) {
 				U1[li][co] = updateUElem(M, U1, V, li, co);
 			}
 		}
-		// rmseNew = rmse(M, multiplyMatrix(U1, V));
-		// }while (Math.abs(rmseNew - rmseOld) > Math.pow(10, (-6)));
 		return U1;
 	}
 
@@ -794,17 +789,11 @@ public class Brouillon {
 		int l = V.length;
 		int c = V[0].length;
 		double[][] V1 = copyMatrix(V);
-		// double rmseOld;
-		// double rmseNew;
-		// do {
-		// rmseOld = rmse(M, multiplyMatrix(U, V1));
 		for (int li = 0; li < l; li++) {
 			for (int co = 0; co < c; co++) {
 				V1[li][co] = updateVElem(M, U, V1, li, co);
 			}
 		}
-		// rmseNew = rmse(M, multiplyMatrix(U, V1));
-		// }while(Math.abs(rmseNew - rmseOld) > Math.pow(10, (-6)));
 		return V1;
 	}
 
