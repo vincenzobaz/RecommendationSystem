@@ -197,13 +197,9 @@ public class Brouillon {
         return somme;
     }
 
-    public static boolean testMatrix(double[][] M, double[][] U, double[][] V) {
-        return isMatrix(M) && isMatrix(U) && isMatrix(V);
-    }
-
     // le test ismatrix me semble de trop car il revient dans la procédure de update element à chaque fois.
     public static double updateUElem(double[][] M, double[][] U, double[][] V, int r, int s) {
-        if (testMatrix(M, U, V)) {
+
             double numerateur = 0.0;
             double denominateur = 0.0;
             for (int j = 0; j < M[0].length; j++) {
@@ -218,13 +214,9 @@ public class Brouillon {
             } else {
                 return 0;
             }
-        } else {
-            return 0;
-        }
     }
 
     public static double updateVElem(double[][] M, double[][] U, double[][] V, int r, int s) {
-        if (testMatrix(M, U, V)) {
             double numerateur = 0.0;
             double denominateur = 0.0;
             for (int i = 0; i < M.length; i++) {
@@ -238,7 +230,7 @@ public class Brouillon {
                 return numerateur / denominateur;
             } else {
                 return 0;
-            }} else {return 0;}
+            }
     }
 
 
@@ -268,25 +260,23 @@ public class Brouillon {
     public static double[][] optimizeU(double[][] M, double[][] U, double[][] V) {
         int l = U.length;
         int c = U[0].length;
-        double[][] U1 = copyMatrix(U);
         for (int li = 0; li < l; li++) {
             for (int co = 0; co < c; co++) {
-                U1[li][co] = updateUElem(M, U1, V, li, co);
+                U[li][co] = updateUElem(M, U, V, li, co);
             }
         }
-        return U1;
+        return U;
     }
 
     public static double[][] optimizeV(double[][] M, double[][] U, double[][] V) {
         int l = V.length;
         int c = V[0].length;
-        double[][] V1 = copyMatrix(V);
         for (int li = 0; li < l; li++) {
             for (int co = 0; co < c; co++) {
-                V1[li][co] = updateVElem(M, U, V1, li, co);
+                V[li][co] = updateVElem(M, U, V, li, co);
             }
         }
-        return V1;
+        return V;
     }
 
     //j'ai modifié le recommend pour qu'il affiche un compteur durant les calculs
@@ -296,67 +286,68 @@ public class Brouillon {
 // 50 me semble être une bonne solution mais elle est très chère en temps.
     public static int[] recommend(double[][] M, int d) {
     	System.out.println("Entree dans recommend");
-        double sommeM = 0.0;
-        int    nbM = 0;
-        int    nbEl = M[0].length * M.length;
-        int    Fx = (int)((66600* Math.pow(nbEl,2)) /(3*Math.pow(nbEl,3)) +1);
-        int nbPointsDeparts = 0;
-        if(Fx >500) {
-             nbPointsDeparts = 500;
-        }else{ nbPointsDeparts = Fx;}
+        if(isMatrix(M)) {
+            double sommeM = 0.0;
+            int nbM = 0;
+            int nbEl = M[0].length * M.length;
+            int Fx = (int) ((66600 * Math.pow(nbEl, 2)) / (3 * Math.pow(nbEl, 3)) + 1);
+            int nbPointsDeparts;
+            if (Fx > 500) {
+                nbPointsDeparts = 500;
+            } else {
+                nbPointsDeparts = Fx;
+            }
 
-        // calcul de la valeur initiale des matrices U et V en prenant la racine de la moyenne des Mij
-        for(int i =0;i<M.length; ++i) {
-            for (int j = 0; j < M[0].length; ++j) {
-                if (M[i][j] != 0) {
-                    sommeM += M[i][j];
-                    ++nbM;
+            // calcul de la valeur initiale des matrices U et V en prenant la racine de la moyenne des Mij
+            for (int i = 0; i < M.length; ++i) {
+                for (int j = 0; j < M[0].length; ++j) {
+                    if (M[i][j] != 0) {
+                        sommeM += M[i][j];
+                        ++nbM;
+                    }
                 }
             }
-        }
-        double v = Math.sqrt(( sommeM/nbM )/d);
+            double v = Math.sqrt((sommeM / nbM) / d);
 
-        // déclaration des matrices
-        double[][] uMatrix;
-        double[][] vMatrix;
-        double[][] P;
+            // déclaration des matrices
+            double[][] uMatrix;
+            double[][] vMatrix;
+            double[][] P;
 
-        double[][] minUMatrix;
-        double[][] minVMatrix;
-        double[][] minP = createMatrix( M.length,  M[0].length, Integer.MAX_VALUE, Integer.MAX_VALUE);
+            double[][] minUMatrix;
+            double[][] minVMatrix;
+            double[][] minP = createMatrix(M.length, M[0].length, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
 
         /*
         Ajustement de U et V et d´ecision de quand arrˆeter
          */
 
-        for(int c = 0; c < nbPointsDeparts; ++c)
-        {
-            int i = 0;
-            double tmpRmse;
-            double Rmse = 0;
-            uMatrix = createMatrix(M.length, d, v, v);
-            vMatrix = createMatrix(d,M[0].length, v ,v);
-            // déclration du nombre aléatoire altérant le prochain v.
-            double nbRand = nbAleatoire(-v,v);
+            for (int c = 0; c < nbPointsDeparts; ++c) {
+                int i = 0;
+                double tmpRmse;
+                double Rmse = 0;
+                uMatrix = createMatrix(M.length, d, v, v);
+                vMatrix = createMatrix(d, M[0].length, v, v);
+                // déclration du nombre aléatoire altérant le prochain v.
+                double nbRand = nbAleatoire(-v, v);
 
-            do{
-                tmpRmse = Rmse;
-                uMatrix = optimizeU(M, uMatrix,vMatrix);
-                vMatrix = optimizeV(M, uMatrix, vMatrix);
-                P = multiplyMatrix(uMatrix ,vMatrix);
-                Rmse = rmse(M,P);
-                ++i;
-            }while(Math.abs((tmpRmse - Rmse))  > Math.pow(10,(-6)));
-            System.out.println("matrice no "+ (c+1) +"/"+ Fx +" nombre d'itération : "+ i);
-            if(c == 0 ||  rmse(M,minP) > rmse(M,P))
-            {
-                minUMatrix = copyMatrix(uMatrix);
-                minVMatrix = copyMatrix(vMatrix);
-                minP = multiplyMatrix(minUMatrix,minVMatrix);
+                do {
+                    tmpRmse = Rmse;
+                    uMatrix = optimizeU(M, uMatrix, vMatrix);
+                    vMatrix = optimizeV(M, uMatrix, vMatrix);
+                    P = multiplyMatrix(uMatrix, vMatrix);
+                    Rmse = rmse(M, P);
+                    ++i;
+                } while (Math.abs((tmpRmse - Rmse)) > Math.pow(10, (-6)));
+                System.out.println("matrice no " + (c + 1) + "/" + Fx + " nombre d'itération : " + i);
+                if (c == 0 || rmse(M, minP) > rmse(M, P)) {
+                    minUMatrix = copyMatrix(uMatrix);
+                    minVMatrix = copyMatrix(vMatrix);
+                    minP = multiplyMatrix(minUMatrix, minVMatrix);
+                }
+                v = Math.sqrt((sommeM / nbM) / d) + nbRand;
             }
-            v = Math.sqrt(( sommeM/nbM )/d) + nbRand;
-        }
 
         /*
         Elle retournera un tableau d’entiers indiquant
@@ -366,24 +357,22 @@ public class Brouillon {
         qui n’´etait pas not´es au d´epart). S’il n’y a pas de tel article la valeur retourn´ee sera −1 pour l’utilisateur i.
          */
 
-        int[] recomendation = new int[M.length];
-        for(int i = 0; i< M.length; ++i)
-        {
-            double noteMax = -1;
-            for(int j = 0; j<M[0].length; ++j)
-            {
-                if(M[i][j] == 0 && minP[i][j] > noteMax)
-                {
-                    noteMax = minP[i][j];
-                    recomendation[i] = j;
+            int[] recomendation = new int[M.length];
+            for (int i = 0; i < M.length; ++i) {
+                double noteMax = -1;
+                for (int j = 0; j < M[0].length; ++j) {
+                    if (M[i][j] == 0 && minP[i][j] > noteMax) {
+                        noteMax = minP[i][j];
+                        recomendation[i] = j;
+                    }
+                }
+                if (noteMax == -1) {
+                    recomendation[i] = -1;
                 }
             }
-            if(noteMax == -1)
-            {
-                recomendation[i] = -1;
-            }
+            System.out.println("la matrice sélectionnée à un rmse de " + rmse(M, minP));
+            return recomendation;
         }
-        System.out.println("la matrice sélectionnée à un rmse de "+rmse(M,minP));
-        return recomendation;
+        return null;
     }
 }
