@@ -299,7 +299,7 @@ public class Brouillon {
         double sommeM = 0.0;
         int    nbM = 0;
         int    nbEl = M[0].length * M.length;
-        int    Fx = (int)((66600* Math.pow(nbEl,2)) /(Math.pow(nbEl,3)) +1);
+        int    Fx = (int)((66600* Math.pow(nbEl,2)) /(3*Math.pow(nbEl,3)) +1);
         int nbPointsDeparts = 0;
         if(Fx >500) {
              nbPointsDeparts = 500;
@@ -348,7 +348,7 @@ public class Brouillon {
                 Rmse = rmse(M,P);
                 ++i;
             }while(Math.abs((tmpRmse - Rmse))  > Math.pow(10,(-6)));
-            System.out.println("matrice no "+ (c+1) +" nombre d'itération : "+ i);
+            System.out.println("matrice no "+ (c+1) +"/"+ Fx +" nombre d'itération : "+ i);
             if(c == 0 ||  rmse(M,minP) > rmse(M,P))
             {
                 minUMatrix = copyMatrix(uMatrix);
