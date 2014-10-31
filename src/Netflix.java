@@ -13,7 +13,7 @@ public class Netflix {
 		//read data - 
 		double [][] M;
 //		M = Netflix.readData("test.m");
-		M = Netflix.readData("/home/bazzucch/Desktop/myfiles/RecommendationSystem/src/utility_user5_movies10.m");		
+		M = Netflix.readData("C:/Users/Funky/IdeaProjects/RecommendationSystem/src/utility_user5_movies10.m");
 		Netflix.printData(M);
 	}
 	

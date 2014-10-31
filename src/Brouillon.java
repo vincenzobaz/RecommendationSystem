@@ -27,7 +27,7 @@ public class Brouillon {
 */
 //        System.out.println(matrixToString(matriceDeTest(150,50,5)));
 
-        double[][] M = Netflix.readData("/home/bazzucch/Desktop/myfiles/RecommendationSystem/src/utility_user300_movies500.m");
+        double[][] M = Netflix.readData("C:/Users/Funky/IdeaProjects/RecommendationSystem/src/utility_user100_movies200.m");
 
         // la variation de d apporte de gros changements sur le rmse. d étant la dimensions des matrices u et v, si il est petit par rapport à la taille de M il fait croitre le temps de calculs
         // je propose qu'on fixe donc d = sqrt(M.length * M[0].length);
@@ -298,7 +298,12 @@ public class Brouillon {
     	System.out.println("Entree dans recommend");
         double sommeM = 0.0;
         int    nbM = 0;
-        int    nbPointsDeparts = 5;
+        int    nbEl = M[0].length * M.length;
+        int    Fx = (int)((66600* Math.pow(nbEl,2)) /(Math.pow(nbEl,3)) +1);
+        int nbPointsDeparts = 0;
+        if(Fx >500) {
+             nbPointsDeparts = 500;
+        }else{ nbPointsDeparts = Fx;}
 
         // calcul de la valeur initiale des matrices U et V en prenant la racine de la moyenne des Mij
         for(int i =0;i<M.length; ++i) {
