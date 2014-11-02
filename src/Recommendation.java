@@ -250,7 +250,7 @@ public class Recommendation {
 
             //Ajustement de U et V et d´ecision de quand arrêter
             for (int c = 0; c < nbPointsDeparts; ++c) {
-                int i = 0;
+//int i = 0;
                 double tmpRmse;
                 double Rmse = 0;
                 uMatrix = createMatrix(M.length, d, v, v);
@@ -266,7 +266,7 @@ public class Recommendation {
                     vMatrix = optimizeV(M, uMatrix, vMatrix);
                     P = multiplyMatrix(uMatrix, vMatrix);
                     Rmse = rmse(M, P);
-                    ++i;
+//++i;
                 } while (Math.abs((tmpRmse - Rmse)) > Math.pow(10, (-6)));
 //System.out.println("matrice no " + (c + 1) + "/" + nbPointsDeparts + " nombre d'itération : " + i +" rmse : "+ Rmse);
 
