@@ -27,7 +27,7 @@ public class Brouillon {
 */
 //        System.out.println(matrixToString(matriceDeTest(150,50,5)));
 
-        double[][] M = Netflix.readData("C:/Users/Funky/IdeaProjects/RecommendationSystem/src/utility_user100_movies200.m");
+        double[][] M = Netflix.readData("C:/Users/Funky/IdeaProjects/RecommendationSystem/src/utility_user5_movies10.m");
 
         // la variation de d apporte de gros changements sur le rmse. d étant la dimensions des matrices u et v, si il est petit par rapport à la taille de M il fait croitre le temps de calculs
         // je propose qu'on fixe donc d = sqrt(M.length * M[0].length);
@@ -39,7 +39,7 @@ public class Brouillon {
 
         int[] fine = recommend(M, 20);
 
-        for (int i=0; i<fine.length; i++){
+        for (int i=0; i<fine.length; ++i){
             System.out.println("l'élément recommandé est à la position : ("+ i +";" +fine[i]+")") ;
         }
 
@@ -48,7 +48,7 @@ public class Brouillon {
     //cette methode permet de creer des matrices de tests.
     private static double [][] matriceDeTest(int lignes,int colonnes, int bornesup) {
         double[][] matrice = new double[lignes][colonnes];
-        for(int i =0; i<lignes;++i)
+        for(int i =0; i<lignes; ++i)
         {
             for(int j = 0; j<colonnes; ++j)
             {
@@ -64,10 +64,10 @@ public class Brouillon {
     public static String matrixToString(double[][] A) {
         String stringOfMatrix = "{" + "\n";
 
-        for (int i = 0; i < A.length; i++) {
+        for (int i = 0; i < A.length; ++i) {
             stringOfMatrix += "  " + '{';
 
-            for (int j = 0; j < A[i].length; j++) {
+            for (int j = 0; j < A[i].length; ++j) {
                 if (j == A[i].length - 1) {
                     stringOfMatrix = stringOfMatrix + A[i][j];
                 } else {
@@ -104,9 +104,9 @@ public class Brouillon {
         if (A[0].length != B.length  || !isMatrix(A) || !isMatrix(B)) {
             return null;
         } else {
-            for (int i = 0; i < product.length; i++) {
-                for (int j = 0; j < product[0].length; j++) {
-                    for (int x = 0; x < A[0].length; x++) {
+            for (int i = 0; i < product.length; ++i) {
+                for (int j = 0; j < product[0].length; ++j) {
+                    for (int x = 0; x < A[0].length; ++x) {
                         product[i][j] += A[i][x] * B[x][j];
                     }
                 }
@@ -123,12 +123,12 @@ public class Brouillon {
     }
 
     // fonctions trouvée sur le net qui inclu visiblement les bornes
-    public double nbAleatoireInclude(double max, double min) {
+    public static double nbAleatoireInclude(double borneInf, double borneSup) {
         double r = Math.random();
         if (r < 0.5) {
-            return ((1 - Math.random()) * (max - min) + min);
+            return ((1 - Math.random()) * (borneSup - borneInf) + borneInf);
         }
-        return (Math.random() * (max - min) + min);
+        return (Math.random() * (borneSup - borneInf) + borneInf);
     }
 
 
@@ -137,10 +137,10 @@ public class Brouillon {
         if (m == 0 || n == 0 || k > l) {
             return null;
         } else {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < m; j++) {
+            for (int i = 0; i < n; ++i) {
+                for (int j = 0; j < m; ++j) {
 
-                    mat[i][j] = nbAleatoire(k, l);
+                    mat[i][j] = nbAleatoireInclude(k, l);
                 }
             }
         }
@@ -153,8 +153,8 @@ public class Brouillon {
         if (m == 0 || n == 0 || k > l) {
             return null;
         } else {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < m; j++) {
+            for (int i = 0; i < n; ++i) {
+                for (int j = 0; j < m; ++j) {
 
                     mat[i][j] = nbAleatoire(k, l);
                 }
@@ -170,8 +170,8 @@ public class Brouillon {
         if (lM == P.length && cM == P[0].length) {
             int nonNuls = 0;
             double s = 0;
-            for (int i = 0; i < lM; i++) {
-                for (int j = 0; j < cM; j++) {
+            for (int i = 0; i < lM; ++i) {
+                for (int j = 0; j < cM; ++j) {
                     if (M[i][j] != 0) {
                         nonNuls++;
                         s += Math.pow(P[i][j] - M[i][j],2);
@@ -189,7 +189,7 @@ public class Brouillon {
     public static double SommeElementsInt(double[][] U, double[][] V, int r, int j, int valInterdite) {
         int dim = V.length;
         double somme = 0.0;
-        for (int k = 0; k < dim; k++) {
+        for (int k = 0; k < dim; ++k) {
             if (k != valInterdite) {
                 somme += U[r][k] * V[k][j];
             }
@@ -202,7 +202,7 @@ public class Brouillon {
 
             double numerateur = 0.0;
             double denominateur = 0.0;
-            for (int j = 0; j < M[0].length; j++) {
+            for (int j = 0; j < M[0].length; ++j) {
                 if (M[r][j] != 0) {
                     numerateur += V[s][j]
                             * (M[r][j] - SommeElementsInt(U, V, r, j, s));
@@ -219,7 +219,7 @@ public class Brouillon {
     public static double updateVElem(double[][] M, double[][] U, double[][] V, int r, int s) {
             double numerateur = 0.0;
             double denominateur = 0.0;
-            for (int i = 0; i < M.length; i++) {
+            for (int i = 0; i < M.length; ++i) {
                 if (M[i][s] != 0) {
                     numerateur += U[i][r]
                             * (M[i][s] - SommeElementsInt(U, V, i, s, r));
@@ -238,8 +238,8 @@ public class Brouillon {
         int l = MAT.length;
         int c = MAT[0].length;
         double[][] copy = new double[l][c];
-        for (int i = 0; i < l; i++) {
-            for (int j = 0; j < c; j++) {
+        for (int i = 0; i < l; ++i) {
+            for (int j = 0; j < c; ++j) {
                 copy[i][j] = MAT[i][j];
             }
         }
@@ -260,7 +260,7 @@ public class Brouillon {
     public static double[][] optimizeU(double[][] M, double[][] U, double[][] V) {
         int l = U.length;
         int c = U[0].length;
-        for (int li = 0; li < l; li++) {
+        for (int li = 0; li < l; ++li) {
             for (int co = 0; co < c; co++) {
                 U[li][co] = updateUElem(M, U, V, li, co);
             }
@@ -271,7 +271,7 @@ public class Brouillon {
     public static double[][] optimizeV(double[][] M, double[][] U, double[][] V) {
         int l = V.length;
         int c = V[0].length;
-        for (int li = 0; li < l; li++) {
+        for (int li = 0; li < l; ++li) {
             for (int co = 0; co < c; co++) {
                 V[li][co] = updateVElem(M, U, V, li, co);
             }
@@ -290,7 +290,7 @@ public class Brouillon {
             double sommeM = 0.0;
             int nbM = 0;
             int nbEl = M[0].length * M.length;
-            int Fx = (int) ((66600 * Math.pow(nbEl, 2)) / (3 * Math.pow(nbEl, 3)) + 1);
+            int Fx = (int) ((24000 * nbEl / (Math.pow(nbEl, 2)) + 1));
             int nbPointsDeparts;
             if (Fx > 500) {
                 nbPointsDeparts = 500;
@@ -340,7 +340,7 @@ public class Brouillon {
                     Rmse = rmse(M, P);
                     ++i;
                 } while (Math.abs((tmpRmse - Rmse)) > Math.pow(10, (-6)));
-                System.out.println("matrice no " + (c + 1) + "/" + Fx + " nombre d'itération : " + i);
+                System.out.println("matrice no " + (c + 1) + "/" + nbPointsDeparts + " nombre d'itération : " + i +" rmse : "+ Rmse);
                 if (c == 0 || rmse(M, minP) > rmse(M, P)) {
                     minUMatrix = copyMatrix(uMatrix);
                     minVMatrix = copyMatrix(vMatrix);
