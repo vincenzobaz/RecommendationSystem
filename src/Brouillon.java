@@ -122,15 +122,15 @@ public class Brouillon {
         return ( borneInf + random.nextDouble()*(borneSup - borneInf));
     }
 
-    public static double nbAleatoire(int borneInf, int borneSup) {
-        double value = 0.0;
-        int entier = random.nextInt(borneSup - borneInf + 1);
-        value += entier + borneInf;
-        if (entier != borneSup) {
-            value += random.nextDouble();
+    // fonctions trouvée sur le net qui inclu visiblement les bornes
+    public double nbAleatoireInclude(double max, double min) {
+        double r = Math.random();
+        if (r < 0.5) {
+            return ((1 - Math.random()) * (max - min) + min);
         }
-        return (value);
+        return (Math.random() * (max - min) + min);
     }
+
 
     public static double[][] createMatrix(int n, int m, int k, int l) {
         double[][] mat = new double[n][m];
