@@ -1,9 +1,8 @@
 package assignement;
-import Netflix;
 
 import java.util.Random;
 
-public class Brouillon {
+public class Recommendation {
 
 	/*
 	 * Inscrivez votre nom complet (pr�nom et nom de famille) ainsi que votre
@@ -19,34 +18,6 @@ public class Brouillon {
     public static int SCIPER2 = 247410;
 
     static Random random = new Random();
-
-    public static void main(String[] args) {
-/*
-        double test = -1;
-        while(test != 1.0) {
-            test = nbAleatoire(0, 1);
-        }
-        System.out.println("le test à fonctionné");
-*/
-//        System.out.println(matrixToString(matriceDeTest(150,50,5)));
-
-        double[][] M = Netflix.readData("C:/Users/Funky/IdeaProjects/RecommendationSystem/src/utility_user5_movies10.m");
-
-        // la variation de d apporte de gros changements sur le rmse. d étant la dimensions des matrices u et v, si il est petit par rapport à la taille de M il fait croitre le temps de calculs
-        // je propose qu'on fixe donc d = sqrt(M.length * M[0].length);
-        // Remarque: avec un d petit on obtient souvent un rmse plus petit. et avec un d plus grand, rmse constant.
-
-        //pour une matrice (150,50,5) d = sqrt(M.length * M[0].length)  t < 2 min  pour 5 points de départs
-        //pour une matrice (150,50,5) d = 20)                           t < 2 min  pour 1 points de départs
-        int d = (int)Math.sqrt(M[0].length * M.length);
-
-        int[] fine = recommend(M, 20);
-
-        for (int i=0; i<fine.length; ++i){
-            System.out.println("l'élément recommandé est à la position : ("+ i +";" +fine[i]+")") ;
-        }
-
-    }
 
     //cette methode permet de creer des matrices de tests.
     private static double [][] matriceDeTest(int lignes,int colonnes, int bornesup) {
@@ -249,17 +220,6 @@ public class Brouillon {
         return copy;
     }
 
-//le code comparison n'était jamais utilisé.
-    /*
-        public static boolean rmseComparison(double[][] M, double[][] P) {
-            double rmseOld = 0;
-            return false;
-        }
-    */
-
-    //j'ai pensé qu'il était préférable d'optimiser les matrices l'une après l'autre
-// j'ai donc mis en commentaire le code qui permettait d'itérer l'optimisation
-// et l'ai ajouté dans le recommend.
     public static double[][] optimizeU(double[][] M, double[][] U, double[][] V) {
         int l = U.length;
         int c = U[0].length;
