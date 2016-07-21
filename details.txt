@@ -1,4 +1,0 @@
-matrice U = utilisateurs n x d
-matrice V = features d*m
-matrice M = produit de U et V n * m
-
